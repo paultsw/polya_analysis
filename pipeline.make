@@ -31,20 +31,19 @@ THREADS=8
 # run `all` if called without rule:
 .DEFAULT_GOAL = all
 
-all: makedirs programs nanopolish minimap2 samtools download polya plots
+all: makedirs programs download #prepare_data polya plots
 
 # construct all directories that don't alraedy come with the repo:
 makedirs:
-	test ! -d $(DATADIR) && mkdir $(DATADIR)
 	test ! -d $(ONTDATADIR) && mkdir $(ONTDATADIR)
+	test ! -d $(ALIGNDIR) && mkdir $(ALIGNDIR)
 	test ! -d $(PLOTDIR) && mkdir $(PLOTDIR)
 	test ! -d $(PROGDIR) && mkdir $(PROGDIR)
-	test ! -d $(ALIGNDIR) && mkdir $(ALIGNDIR)
 	test ! -d $(POLYADIR) && mkdir $(POLYADIR)
 
 # tell MAKE that the following dependencies don't generate any files:
 .PHONY: all nanopolish minimap2 samtools download polya plots pylibs plot_segmentations \
-	prepare_data prep_10x prep_15x prep_30x prep_60xb prep_60xn prep_60x prep_80x prep_100x
+	prepare_data prep_10x prep_15x prep_30x prep_60xb prep_60xn prep_60x prep_80x prep_100x clean
 
 # '.DELETE_ON_ERROR' is a special rule that tells MAKE to
 # delete target files if this makefile ends in an error:
@@ -52,6 +51,10 @@ makedirs:
 # that tells MAKE to avoid deleting any intermediate files.
 .DELETE_ON_ERROR:
 .SECONDARY:
+
+# revert everything to its original state:
+clean:
+	cd $(BASEDIR) && rm -rf $(PROGDIR) $(PLOTDIR) $(ONTDATADIR) $(ALIGNDIR) $(POLYADIR)
 
 ################################################################################
 #
@@ -69,12 +72,12 @@ nanopolish:
 	cd $(NANOPOLISH_DIR) && git checkout tags/v0.10.2 && $(MAKE) && cd $(BASEDIR)
 
 MINIMAP2_URL=https://github.com/lh3/minimap2/releases/download/v2.12/minimap2-2.12_x64-linux.tar.bz2
-MINIMAP2_TAR=$(PROGDIR)/minimap2-2.12.tar.bz2
+MINIMAP2_TAR=$(BASEDIR)/minimap2-2.12_x64-linux.tar.bz2
 MINIMAP2_DIR=$(PROGDIR)/minimap2-2.12_x64-linux
 MINIMAP2=$(MINIMAP2_DIR)/minimap2
 minimap2:
-	wget $(MINIMAP2_URL) && mv $(MINIMAP_TAR) $(PROGDIR)
-	cd $(PROGDIR) && tar -jxvf minimap2-2.12.tar.bz2 && $(MAKE) && cd $(BASEDIR)
+	cd $(PROGDIR) && wget $(MINIMAP2_URL)
+	cd $(PROGDIR) && tar -jxvf minimap2-2.12_x64-linux.tar.bz2 && cd $(BASEDIR)
 
 SAMTOOLS_URL=https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2
 SAMTOOLS_DIR=$(PROGDIR)/samtools-1.9
@@ -340,7 +343,6 @@ polya: 10x.polya.tsv 15x.polya.tsv 30x.polya.tsv 60xB.polya.tsv 60xN.polya.tsv 6
 #
 #  Step 5: run all R scripts to generate plots from output TSVs.
 #
-#  TODO: debug pip installs
 ################################################################################
 
 RSCRIPT=Rscript
@@ -348,13 +350,13 @@ PYTHON=python
 
 plots: pylibs ont.estimates.violin.png ont.estimates.density.png plot_segmentations
 
-# --- install python dependencies: # [fix]
+# --- install python dependencies:
 pylibs:
 	pip install pandas
 	pip install numpy
 	pip install matplotlib
 	pip install seaborn
-	pip install fast5
+	pip install h5py
 
 ALL_POLYAS=$(10X.POLYA) $(15X.POLYA) $(30X.POLYA) $(60XB.POLYA) $(60XN.POLYA) $(60X.POLYA) $(80X.POLYA) $(100X.POLYA)
 

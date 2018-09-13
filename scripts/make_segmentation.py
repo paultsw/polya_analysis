@@ -4,7 +4,7 @@ Plot a random segmentation from a dataset.
 Usage:
   $ python polya.out.tsv reads.fastq.readdb.index
 """
-import fast5
+import h5py
 import pandas as pd
 import numpy as np
 import argparse
@@ -18,6 +18,24 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
+def load_fast5_signal(read_path):
+    """Load a fast5 signal from read path; return as numpy array."""
+    read_h5 = h5py.File(read_path, 'r')
+
+    # get scaling parameters:
+    offset = read_h5['UniqueGlobalKey']['channel_id'].attrs['offset']
+    digitisation = read_h5['UniqueGlobalKey']['channel_id'].attrs['digitisation']
+    read_range = read_h5['UniqueGlobalKey']['channel_id'].attrs['range']
+
+    # get raw integer-encoded signal:
+    rn = list(read_h5['Raw']['Reads'].keys())[0]
+    signal = (read_range / digitisation) * (np.array(read_h5['Raw']['Reads'][rn]['Signal']) + offset)
+
+    # close hdf object and return numpy signal:
+    read_h5.close()
+    return signal
+    
+
 def main(args):
     """Filter-in PASS-ing segmentations and plot a random segmented read to file."""
     # load dataframes:
@@ -30,7 +48,7 @@ def main(args):
     read_path = readdb[readdb['readname'] == read_id].as_matrix()[0][1]
 
     # load fast5 file:
-    signal = np.array(fast5.File(read_path).get_raw_samples())
+    signal = load_fast5_signal(read_path)
 
     # make segmentation plot:
     plt.figure(figsize=(18,6))

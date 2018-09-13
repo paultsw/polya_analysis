@@ -6,6 +6,11 @@
 
 library("ggplot2")
 
+## helper function: extract last item past the final '/':
+strip.filename <- function(pathstr) {
+    strsplit(pathstr, "/")[[1]][-1]
+}
+
 ## merge all dataframes together by PASS-ing poly(A) estimate:
 make.joint.dataframe <- function(fns) {
     ## load inputs as dataframes:
@@ -13,7 +18,7 @@ make.joint.dataframe <- function(fns) {
     i <- 1
     for (fn in fns) {
         tmp <- read.csv(fn, sep = '\t')
-        dataframes[[i]] <- data.frame(dataset = factor(rep(fn, each=nrow(tmp[tmp$qc_tag == 'PASS',]))),
+        dataframes[[i]] <- data.frame(dataset = factor(rep(strip.filename(fn), each=nrow(tmp[tmp$qc_tag == 'PASS',]))),
                                       lengths = tmp[tmp$qc_tag == 'PASS',]$polya_length)
         i <- i + 1
     }
