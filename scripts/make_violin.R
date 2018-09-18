@@ -8,10 +8,11 @@ library("ggplot2")
 
 ## helper function: extract last item past the final '/':
 strip.filename <- function(pathstr) {
-    strsplit(pathstr, "/")[[1]][-1]
+    tail(strsplit(pathstr, "/")[[1]][-1], n=1)
 }
 
-## merge all dataframes together by PASS-ing poly(A) estimate:
+## merge all dataframes together by PASS-ing poly(A) estimate;
+## clamp to 260nt for plotting
 make.joint.dataframe <- function(fns) {
     ## load inputs as dataframes:
     dataframes <- list()
@@ -19,7 +20,7 @@ make.joint.dataframe <- function(fns) {
     for (fn in fns) {
         tmp <- read.csv(fn, sep = '\t')
         dataframes[[i]] <- data.frame(dataset = factor(rep(strip.filename(fn), each=nrow(tmp[tmp$qc_tag == 'PASS',]))),
-                                      lengths = tmp[tmp$qc_tag == 'PASS',]$polya_length)
+                                      lengths = pmin(tmp[tmp$qc_tag == 'PASS',]$polya_length, 300))
         i <- i + 1
     }
     # merge dataframes together and (automatically) return:
@@ -36,7 +37,7 @@ main <- function() {
     max.ticks <- max(df$lengths)
     plot <- ggplot(df, aes(x=dataset, y=lengths)) +
         geom_violin() +
-        scale_y_continuous(name="est p(A) length", breaks=seq(0,max.ticks,10), limits=c(0,250)) +
+        scale_y_continuous(name="est p(A) length", breaks=seq(0,max.ticks,10), limits=c(0,300)) +
         theme_bw()
 
     ## save plot to file:
