@@ -20,7 +20,7 @@ is (as of pixel time) closed source but may be downloaded via the ONT community 
 
 Then, run
 ```
-make --file=full_pipeline.make
+make -f pipeline.make
 ```
 to download all datasets and code and generate all relevant files.
 

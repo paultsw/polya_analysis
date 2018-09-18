@@ -166,7 +166,7 @@ prepare_data: prep_10x prep_15x prep_30x prep_60xb prep_60xn prep_60x prep_80x p
 
 # modify the following `BASECALL` variable to point to your copy of `read_fast5_basecaller.py` from albacore:
 BASECALL=read_fast5_basecaller.py
-BASECALL_OPTS=--worker_threads=$(THREADS) -f FLO-MIN107 -k SQK-RNA001
+BASECALL_OPTS=--worker_threads=$(THREADS) -f FLO-MIN107 -k SQK-RNA001 -q 0
 
 ENOLASE.REF=$(REFDIR)/enolase_reference.fas
 
