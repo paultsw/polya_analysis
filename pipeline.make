@@ -168,6 +168,8 @@ prepare_data: prep_10x prep_15x prep_30x prep_60xb prep_60xn prep_60x prep_80x p
 BASECALL=read_fast5_basecaller.py
 BASECALL_OPTS=--worker_threads=$(THREADS) -f FLO-MIN107 -k SQK-RNA001 -q 0
 
+MINIMAP_OPTS=-a -x map-ont
+
 ENOLASE.REF=$(REFDIR)/enolase_reference.fas
 
 10X.FAST5=$(10X_DIR)/fast5/pass
@@ -180,7 +182,7 @@ ENOLASE.REF=$(REFDIR)/enolase_reference.fas
 prep_10x: download programs
 	$(BASECALL) $(BASECALL_OPTS) -s $(10X.FASTQ.DIR) -i $(10X.FAST5)
 	cat $(10X.FASTQ.DIR)/workspace/pass/*.fastq > $(10X.FASTQ)
-	$(MINIMAP2) -a -x map-ont $(ENOLASE.REF) $(10X.FASTQ) > $(10X.SAM)
+	$(MINIMAP2) $(MINIMAP_OPTS) $(ENOLASE.REF) $(10X.FASTQ) > $(10X.SAM)
 	$(SAMTOOLS) view -b $(10X.SAM) -o $(10X.BAM)
 	cd $(ALIGNDIR) && $(SAMTOOLS) sort -T tmp -o 10xpolya.sorted.bam 10xpolya.bam && $(SAMTOOLS) index 10xpolya.sorted.bam
 	cd $(10X.FASTQ.DIR) && $(NANOPOLISH) index --directory=$(10X.FAST5) --sequencing-summary=$(10X.SEQSUMMARY) 10xpolyA.fastq
@@ -196,7 +198,7 @@ prep_10x: download programs
 prep_15x: download programs
 	$(BASECALL) $(BASECALL_OPTS) -s $(15X.FASTQ.DIR) -i $(15X.FAST5)
 	cat $(15X.FASTQ.DIR)/workspace/pass/*.fastq > $(15X.FASTQ)
-	$(MINIMAP2) -a -x map-ont $(ENOLASE.REF) $(15X.FASTQ) > $(15X.SAM)
+	$(MINIMAP2) $(MINIMAP_OPTS) $(ENOLASE.REF) $(15X.FASTQ) > $(15X.SAM)
 	$(SAMTOOLS) view -b $(15X.SAM) -o $(15X.BAM)
 	cd $(ALIGNDIR) && $(SAMTOOLS) sort -T tmp -o 15xpolya.sorted.bam 15xpolya.bam && $(SAMTOOLS) index 15xpolya.sorted.bam
 	cd $(15X.FASTQ.DIR) && $(NANOPOLISH) index --directory=$(15X.FAST5) --sequencing-summary=$(15X.SEQSUMMARY) 15xpolyA.fastq
@@ -212,7 +214,7 @@ prep_15x: download programs
 prep_30x: download programs
 	$(BASECALL) $(BASECALL_OPTS) -s $(30X.FASTQ.DIR) -i $(30X.FAST5)
 	cat $(30X.FASTQ.DIR)/workspace/pass/*.fastq > $(30X.FASTQ)
-	$(MINIMAP2) -a -x map-ont $(ENOLASE.REF) $(30X.FASTQ) > $(30X.SAM)
+	$(MINIMAP2) $(MINIMAP_OPTS) $(ENOLASE.REF) $(30X.FASTQ) > $(30X.SAM)
 	$(SAMTOOLS) view -b $(30X.SAM) -o $(30X.BAM)
 	cd $(ALIGNDIR) && $(SAMTOOLS) sort -T tmp -o 30xpolya.sorted.bam 30xpolya.bam && $(SAMTOOLS) index 30xpolya.sorted.bam
 	cd $(30X.FASTQ.DIR) && $(NANOPOLISH) index --directory=$(30X.FAST5) --sequencing-summary=$(30X.SEQSUMMARY) 30xpolyA.fastq
@@ -228,7 +230,7 @@ prep_30x: download programs
 prep_60xb: download programs
 	$(BASECALL) $(BASECALL_OPTS) -s $(60XB.FASTQ.DIR) -i $(60XB.FAST5)
 	cat $(60XB.FASTQ.DIR)/workspace/pass/*.fastq > $(60XB.FASTQ)
-	$(MINIMAP2) -a -x map-ont $(ENOLASE.REF) $(60XB.FASTQ) > $(60XB.SAM)
+	$(MINIMAP2) $(MINIMAP_OPTS) $(ENOLASE.REF) $(60XB.FASTQ) > $(60XB.SAM)
 	$(SAMTOOLS) view -b $(60XB.SAM) -o $(60XB.BAM)
 	cd $(ALIGNDIR) && $(SAMTOOLS) sort -T tmp -o 60xBpolya.sorted.bam 60xBpolya.bam && $(SAMTOOLS) index 60xBpolya.sorted.bam
 	cd $(60XB.FASTQ.DIR) && $(NANOPOLISH) index --directory=$(60XB.FAST5) --sequencing-summary=$(60XB.SEQSUMMARY) 60xBpolyA.fastq
@@ -244,7 +246,7 @@ prep_60xb: download programs
 prep_60xn: download programs
 	$(BASECALL) $(BASECALL_OPTS) -s $(60XN.FASTQ.DIR) -i $(60XN.FAST5)
 	cat $(60XN.FASTQ.DIR)/workspace/pass/*.fastq > $(60XN.FASTQ)
-	$(MINIMAP2) -a -x map-ont $(ENOLASE.REF) $(60XN.FASTQ) > $(60XN.SAM)
+	$(MINIMAP2) $(MINIMAP_OPTS) $(ENOLASE.REF) $(60XN.FASTQ) > $(60XN.SAM)
 	$(SAMTOOLS) view -b $(60XN.SAM) -o $(60XN.BAM)
 	cd $(ALIGNDIR) && $(SAMTOOLS) sort -T tmp -o 60xNpolya.sorted.bam 60xNpolya.bam && $(SAMTOOLS) index 60xNpolya.sorted.bam
 	cd $(60XN.FASTQ.DIR) && $(NANOPOLISH) index --directory=$(60XN.FAST5) --sequencing-summary=$(60XN.SEQSUMMARY) 60xNpolyA.fastq
@@ -260,7 +262,7 @@ prep_60xn: download programs
 prep_60x: download programs
 	$(BASECALL) $(BASECALL_OPTS) -s $(60X.FASTQ.DIR) -i $(60X.FAST5)
 	cat $(60X.FASTQ.DIR)/workspace/pass/*.fastq > $(60X.FASTQ)
-	$(MINIMAP2) -a -x map-ont $(ENOLASE.REF) $(60X.FASTQ) > $(60X.SAM)
+	$(MINIMAP2) $(MINIMAP_OPTS) $(ENOLASE.REF) $(60X.FASTQ) > $(60X.SAM)
 	$(SAMTOOLS) view -b $(60X.SAM) -o $(60X.BAM)
 	cd $(ALIGNDIR) && $(SAMTOOLS) sort -T tmp -o 60xpolya.sorted.bam 60xpolya.bam && $(SAMTOOLS) index 60xpolya.sorted.bam
 	cd $(60X.FASTQ.DIR) && $(NANOPOLISH) index --directory=$(60X.FAST5) --sequencing-summary=$(60X.SEQSUMMARY) 60xpolyA.fastq
@@ -276,7 +278,7 @@ prep_60x: download programs
 prep_80x: download programs
 	$(BASECALL) $(BASECALL_OPTS) -s $(80X.FASTQ.DIR) -i $(80X.FAST5)
 	cat $(80X.FASTQ.DIR)/workspace/pass/*.fastq > $(80X.FASTQ)
-	$(MINIMAP2) -a -x map-ont $(ENOLASE.REF) $(80X.FASTQ) > $(80X.SAM)
+	$(MINIMAP2) $(MINIMAP_OPTS) $(ENOLASE.REF) $(80X.FASTQ) > $(80X.SAM)
 	$(SAMTOOLS) view -b $(80X.SAM) -o $(80X.BAM)
 	cd $(ALIGNDIR) && $(SAMTOOLS) sort -T tmp -o 80xpolya.sorted.bam 80xpolya.bam && $(SAMTOOLS) index 80xpolya.sorted.bam
 	cd $(80X.FASTQ.DIR) && $(NANOPOLISH) index --directory=$(80X.FAST5) --sequencing-summary=$(80X.SEQSUMMARY) 80xpolyA.fastq
@@ -292,7 +294,7 @@ prep_80x: download programs
 prep_100x: download programs
 	$(BASECALL) $(BASECALL_OPTS) -s $(100X.FASTQ.DIR) -i $(100X.FAST5)
 	cat $(100X.FASTQ.DIR)/workspace/pass/*.fastq > $(100X.FASTQ)
-	$(MINIMAP2) -a -x map-ont $(ENOLASE.REF) $(100X.FASTQ) > $(100X.SAM)
+	$(MINIMAP2) $(MINIMAP_OPTS) $(ENOLASE.REF) $(100X.FASTQ) > $(100X.SAM)
 	$(SAMTOOLS) view -b $(100X.SAM) -o $(100X.BAM)
 	cd $(ALIGNDIR) && $(SAMTOOLS) sort -T tmp -o 100xpolya.sorted.bam 100xpolya.bam && $(SAMTOOLS) index 100xpolya.sorted.bam
 	cd $(100X.FASTQ.DIR) && $(NANOPOLISH) index --directory=$(100X.FAST5) --sequencing-summary=$(100X.SEQSUMMARY) 100xpolyA.fastq
