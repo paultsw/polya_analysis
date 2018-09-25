@@ -35,6 +35,10 @@ Notes
   at least 20GB of memory per core. We assume `R`, `Rscript`, and `Python` are accessible from the command line
   and that the `ggplot2` R package is pre-installed.
 
+* There is an additional dataset, `60xbpolyAb`, which is commented out and excluded from the pipeline by default.
+  This dataset is a second run of the `60xpolyA` library and has nearly identical distributions/densities. It can
+  easily be downloaded and included in the analysis by uncommenting the lines where appropriate.
+
 Citations
 ---------
 (TBD)

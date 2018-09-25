@@ -96,8 +96,8 @@ samtools: makedirs
 ################################################################################
 
 download: 10xpolyA.tar.gz 15xpolyA.tar.gz 30xpolyA.tar.gz \
-	  60bxpolyAb.tar.gz 60nxpolyA10xN.tar.gz 60xpolyA.tar.gz \
-	  80xpolyA.tar.gz 100xpolyA.tar.gz makedirs
+	  60nxpolyA10xN.tar.gz 60xpolyA.tar.gz \
+	  80xpolyA.tar.gz 100xpolyA.tar.gz makedirs #60bxpolyAb.tar.gz
 
 10X_URL=ftp://ftp.sra.ebi.ac.uk/vol1/ERA158/ERA1580896/oxfordnanopore_native/10xpolyA.tar.gz
 10X_TAR=$(ONTDATADIR)/10xpolyA.tar.gz
@@ -120,12 +120,12 @@ download: 10xpolyA.tar.gz 15xpolyA.tar.gz 30xpolyA.tar.gz \
 	test ! -f $(30X_TAR) && wget $(30X_URL) -O $(30X_TAR)
 	tar -xzf $(30X_TAR) -C $(ONTDATADIR)
 
-60XB_URL=ftp://ftp.sra.ebi.ac.uk/vol1/ERA158/ERA1580896/oxfordnanopore_native/60bxpolyAb.tar.gz
-60XB_TAR=$(ONTDATADIR)/60bxpolyAb.tar.gz
-60XB_DIR=$(ONTDATADIR)/60bxpolyAb
-60bxpolyAb.tar.gz: makedirs
-	test ! -f $(60XB_TAR) && wget $(60XB_URL) -O $(60XB_TAR)
-	tar -xzf $(60XB_TAR) -C $(ONTDATADIR)
+#60XB_URL=ftp://ftp.sra.ebi.ac.uk/vol1/ERA158/ERA1580896/oxfordnanopore_native/60bxpolyAb.tar.gz
+#60XB_TAR=$(ONTDATADIR)/60bxpolyAb.tar.gz
+#60XB_DIR=$(ONTDATADIR)/60bxpolyAb
+#60bxpolyAb.tar.gz: makedirs
+#	test ! -f $(60XB_TAR) && wget $(60XB_URL) -O $(60XB_TAR)
+#	tar -xzf $(60XB_TAR) -C $(ONTDATADIR)
 
 60XN_URL=ftp://ftp.sra.ebi.ac.uk/vol1/ERA158/ERA1580896/oxfordnanopore_native/60nxpolyA10xN.tar.gz
 60XN_TAR=$(ONTDATADIR)/60nxpolyA10xN.tar.gz
@@ -162,7 +162,7 @@ download: 10xpolyA.tar.gz 15xpolyA.tar.gz 30xpolyA.tar.gz \
 #
 ################################################################################
 
-prepare_data: prep_10x prep_15x prep_30x prep_60xb prep_60xn prep_60x prep_80x prep_100x download programs
+prepare_data: prep_10x prep_15x prep_30x prep_60xn prep_60x prep_80x prep_100x download programs #prep_60xb
 
 # modify the following `BASECALL` variable to point to your copy of `read_fast5_basecaller.py` from albacore:
 BASECALL=read_fast5_basecaller.py
@@ -220,21 +220,21 @@ prep_30x: download programs
 	cd $(30X.FASTQ.DIR) && $(NANOPOLISH) index --directory=$(30X.FAST5) --sequencing-summary=$(30X.SEQSUMMARY) 30xpolyA.fastq
 	cd $(BASEDIR)
 
-60XB.FAST5=$(60XB_DIR)/fast5/pass
-60XB.FASTQ.DIR=$(60XB_DIR)/fastq
-60XB.FASTQ=$(60XB.FASTQ.DIR)/60xBpolyA.fastq
-60XB.SAM=$(ALIGNDIR)/60xBpolya.sam
-60XB.BAM=$(ALIGNDIR)/60xBpolya.bam
-60XB.SORTED.BAM=$(ALIGNDIR)/60xBpolya.sorted.bam
-60XB.SEQSUMMARY=$(60XB.FASTQ.DIR)/sequencing_summary.txt
-prep_60xb: download programs
-	$(BASECALL) $(BASECALL_OPTS) -s $(60XB.FASTQ.DIR) -i $(60XB.FAST5)
-	cat $(60XB.FASTQ.DIR)/workspace/pass/*.fastq > $(60XB.FASTQ)
-	$(MINIMAP2) $(MINIMAP_OPTS) $(ENOLASE.REF) $(60XB.FASTQ) > $(60XB.SAM)
-	$(SAMTOOLS) view -b $(60XB.SAM) -o $(60XB.BAM)
-	cd $(ALIGNDIR) && $(SAMTOOLS) sort -T tmp -o 60xBpolya.sorted.bam 60xBpolya.bam && $(SAMTOOLS) index 60xBpolya.sorted.bam
-	cd $(60XB.FASTQ.DIR) && $(NANOPOLISH) index --directory=$(60XB.FAST5) --sequencing-summary=$(60XB.SEQSUMMARY) 60xBpolyA.fastq
-	cd $(BASEDIR)
+#60XB.FAST5=$(60XB_DIR)/fast5/pass
+#60XB.FASTQ.DIR=$(60XB_DIR)/fastq
+#60XB.FASTQ=$(60XB.FASTQ.DIR)/60xBpolyA.fastq
+#60XB.SAM=$(ALIGNDIR)/60xBpolya.sam
+#60XB.BAM=$(ALIGNDIR)/60xBpolya.bam
+#60XB.SORTED.BAM=$(ALIGNDIR)/60xBpolya.sorted.bam
+#60XB.SEQSUMMARY=$(60XB.FASTQ.DIR)/sequencing_summary.txt
+#prep_60xb: download programs
+#	$(BASECALL) $(BASECALL_OPTS) -s $(60XB.FASTQ.DIR) -i $(60XB.FAST5)
+#	cat $(60XB.FASTQ.DIR)/workspace/pass/*.fastq > $(60XB.FASTQ)
+#	$(MINIMAP2) $(MINIMAP_OPTS) $(ENOLASE.REF) $(60XB.FASTQ) > $(60XB.SAM)
+#	$(SAMTOOLS) view -b $(60XB.SAM) -o $(60XB.BAM)
+#	cd $(ALIGNDIR) && $(SAMTOOLS) sort -T tmp -o 60xBpolya.sorted.bam 60xBpolya.bam && $(SAMTOOLS) index 60xBpolya.sorted.bam
+#	cd $(60XB.FASTQ.DIR) && $(NANOPOLISH) index --directory=$(60XB.FAST5) --sequencing-summary=$(60XB.SEQSUMMARY) 60xBpolyA.fastq
+#	cd $(BASEDIR)
 
 60XN.FAST5=$(60XN_DIR)/fast5/pass
 60XN.FASTQ.DIR=$(60XN_DIR)/fastq
@@ -307,8 +307,8 @@ prep_100x: download programs
 #
 ################################################################################
 
-polya: 10x.polya.tsv 15x.polya.tsv 30x.polya.tsv 60xB.polya.tsv 60xN.polya.tsv 60x.polya.tsv \
-	80x.polya.tsv 100x.polya.tsv prepare_data
+polya: 10x.polya.tsv 15x.polya.tsv 30x.polya.tsv 60xN.polya.tsv 60x.polya.tsv \
+	80x.polya.tsv 100x.polya.tsv prepare_data #60xB.polya.tsv
 
 10X.POLYA=$(POLYADIR)/10x.polya.tsv
 10x.polya.tsv: prepare_data
@@ -322,9 +322,9 @@ polya: 10x.polya.tsv 15x.polya.tsv 30x.polya.tsv 60xB.polya.tsv 60xN.polya.tsv 6
 30x.polya.tsv: prepare_data
 	$(NANOPOLISH) polya --threads=$(THREADS) --reads=$(30X.FASTQ) --bam=$(30X.SORTED.BAM) --genome=$(ENOLASE.REF) > $(30X.POLYA)
 
-60XB.POLYA=$(POLYADIR)/60xB.polya.tsv
-60xB.polya.tsv: prepare_data
-	$(NANOPOLISH) polya --threads=$(THREADS) --reads=$(60XB.FASTQ) --bam=$(60XB.SORTED.BAM) --genome=$(ENOLASE.REF) > $(60XB.POLYA)
+#60XB.POLYA=$(POLYADIR)/60xB.polya.tsv
+#60xB.polya.tsv: prepare_data
+#	$(NANOPOLISH) polya --threads=$(THREADS) --reads=$(60XB.FASTQ) --bam=$(60XB.SORTED.BAM) --genome=$(ENOLASE.REF) > $(60XB.POLYA)
 
 60XN.POLYA=$(POLYADIR)/60xN.polya.tsv
 60xN.polya.tsv: prepare_data
@@ -358,7 +358,7 @@ plots: pylibs ont.estimates.violin.png ont.estimates.density.png plot_segmentati
 pylibs:
 	pip install -r requirements.txt
 
-ALL_POLYAS=$(10X.POLYA) $(15X.POLYA) $(30X.POLYA) $(60XB.POLYA) $(60XN.POLYA) $(60X.POLYA) $(80X.POLYA) $(100X.POLYA)
+ALL_POLYAS=$(10X.POLYA) $(15X.POLYA) $(30X.POLYA) $(60XN.POLYA) $(60X.POLYA) $(80X.POLYA) $(100X.POLYA) #$(60XB.POLYA)
 
 # --- comparative violin plots:
 MAKE_VIOLIN=$(SCRIPTS)/make_violin.R
@@ -375,8 +375,8 @@ ont.estimates.density.png: polya
 # --- sampled segmentations from each dataset:
 MAKE_SEG=$(SCRIPTS)/make_segmentation.py
 
-plot_segmentations: ont10x.seg.png ont15x.seg.png ont30x.seg.png ont60xB.seg.png ont60xN.seg.png \
-		    ont60x.seg.png ont80x.seg.png ont100x.seg.png pylibs polya
+plot_segmentations: ont10x.seg.png ont15x.seg.png ont30x.seg.png ont60xN.seg.png \
+		    ont60x.seg.png ont80x.seg.png ont100x.seg.png pylibs polya #ont60xB.seg.png
 
 10X.READDB=$(10X.FASTQ).index.readdb
 ont10x.seg.png: pylibs polya
@@ -390,9 +390,9 @@ ont15x.seg.png: pylibs polya
 ont30x.seg.png: pylibs polya
 	$(PYTHON) $(MAKE_SEG) $(30X.POLYA) $(30X.READDB) --out=$(PLOTDIR)/ont30x.seg.png
 
-60XB.READDB=$(60XB.FASTQ).index.readdb
-ont60xB.seg.png: pylibs polya
-	$(PYTHON) $(MAKE_SEG) $(60XB.POLYA) $(60XB.READDB) --out=$(PLOTDIR)/ont60xB.seg.png
+#60XB.READDB=$(60XB.FASTQ).index.readdb
+#ont60xB.seg.png: pylibs polya
+#	$(PYTHON) $(MAKE_SEG) $(60XB.POLYA) $(60XB.READDB) --out=$(PLOTDIR)/ont60xB.seg.png
 
 60XN.READDB=$(60XN.FASTQ).index.readdb
 ont60xN.seg.png: pylibs polya
