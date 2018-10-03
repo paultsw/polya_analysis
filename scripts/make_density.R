@@ -12,7 +12,7 @@ strip.filename <- function(pathstr) {
 }
 
 ## merge all dataframes together by PASS-ing poly(A) estimate:
-## clamp to max value of 260nt for plotting
+## clamp to max value of 300nt for plotting
 make.joint.dataframe <- function(fns) {
     ## load inputs as dataframes:
     dataframes <- list()
