@@ -32,8 +32,9 @@ Notes
 * This pipeline must be run on a server with an internet connection (to download the datasets from the European
   Nucleotide Archive). We recommend creating a fresh virtual environment and installing ONT's Albacore basecaller
   within that virtual environment before running the makefile pipeline. We recommend a server with 8 cores and
-  at least 20GB of memory per core. We assume `R`, `Rscript`, and `Python` are accessible from the command line
-  and that the `ggplot2` R package is pre-installed.
+  at least 20GB of memory per core. We assume `R`, `Rscript`, and `python` are accessible from the command line
+  and that the `ggplot2` R package is pre-installed. We tested our pipeline with `python 3.4.6`, `R 3.4.4`, and
+  `ggplot2 v2.2.1`.
 
 * There is an additional dataset, `60xbpolyAb`, which is commented out and excluded from the pipeline by default.
   This dataset is a second run of the `60xpolyA` library and has nearly identical distributions/densities. It can
