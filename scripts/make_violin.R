@@ -38,11 +38,11 @@ main <- function() {
     plot <- ggplot(df, aes(x=dataset, y=lengths)) +
         geom_violin() +
         scale_y_continuous(name="est p(A) length", breaks=seq(0,max.ticks,10), limits=c(0,300)) +
-        theme_bw()
+        theme_bw() + theme(text=element_text(size=15))
 
     ## save plot to file:
     ## TODO: optionally set size/dpi/etc.
-    ggsave("violin.png", device="png")
+    ggsave("violin.svg", device="svg", units="in", height=9, width=9)
 }
 
 ### run main function:
