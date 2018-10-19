@@ -8,7 +8,11 @@ library("ggplot2")
 
 ## helper function: extract last item past the final '/':
 strip.filename <- function(pathstr) {
-    tail(strsplit(pathstr, "/")[[1]][-1], n=1)
+    if (grepl("/", pathstr)) {
+        tail(strsplit(pathstr, "/")[[1]][-1], n=1)
+    } else {
+        pathstr
+    }
 }
 
 ## merge all dataframes together by PASS-ing poly(A) estimate;
