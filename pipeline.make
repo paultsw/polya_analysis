@@ -352,7 +352,7 @@ polya: 10x.polya.tsv 15x.polya.tsv 30x.polya.tsv 60xN.polya.tsv 60x.polya.tsv \
 RSCRIPT=Rscript
 PYTHON=python
 
-plots: pylibs ont.estimates.violin.png ont.estimates.density.png plot_segmentations polya
+plots: pylibs ont.estimates.violin.svg ont.estimates.density.svg plot_segmentations ont.statistics.csv polya
 
 # --- install python dependencies:
 pylibs:
@@ -360,17 +360,23 @@ pylibs:
 
 ALL_POLYAS=$(10X.POLYA) $(15X.POLYA) $(30X.POLYA) $(60XN.POLYA) $(60X.POLYA) $(80X.POLYA) $(100X.POLYA) #$(60XB.POLYA)
 
+# --- print table of summary statistics over all datasets to stdout:
+COMPUTE_STATS=$(SCRIPTS)/compute_statistics.py
+
+ont.statistics.csv: pylibs polya
+	$(PYTHON) $(COMPUTE_STATS) $(POLYADIR) > ont.statistics.csv
+
 # --- comparative violin plots:
 MAKE_VIOLIN=$(SCRIPTS)/make_violin.R
 
-ont.estimates.violin.png: polya
-	cd $(BASEDIR) && $(RSCRIPT) $(MAKE_VIOLIN) $(ALL_POLYAS) && mv violin.png $(PLOTDIR)
+ont.estimates.violin.svg: polya
+	cd $(BASEDIR) && $(RSCRIPT) $(MAKE_VIOLIN) $(ALL_POLYAS) && mv ont.estimates.violin.svg $(PLOTDIR)
 
 # --- comparative density plots:
 MAKE_DENSITY=$(SCRIPTS)/make_density.R
 
-ont.estimates.density.png: polya
-	cd $(BASEDIR) && $(RSCRIPT) $(MAKE_DENSITY) $(ALL_POLYAS) && mv density.png $(PLOTDIR)
+ont.estimates.density.svg: polya
+	cd $(BASEDIR) && $(RSCRIPT) $(MAKE_DENSITY) $(ALL_POLYAS) && mv ont.estimates.density.svg $(PLOTDIR)
 
 # --- sampled segmentations from each dataset:
 MAKE_SEG=$(SCRIPTS)/make_segmentation.py
