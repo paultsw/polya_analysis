@@ -78,7 +78,7 @@ def summarize(polyas_dir):
         '60xN.polya.tsv': summary_statistics(df60xN[df60xN['qc_tag'] == 'PASS']['polya_length'].values, 60.),
         '80x.polya.tsv': summary_statistics(df80x[df80x['qc_tag'] == 'PASS']['polya_length'].values, 80.),
         '100x.polya.tsv': summary_statistics(df100x[df100x['qc_tag'] == 'PASS']['polya_length'].values, 100.),
-    }).to_string())
+    }).round(2).to_csv())
 
 
 if __name__ == '__main__':
