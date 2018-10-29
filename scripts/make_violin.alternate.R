@@ -39,15 +39,10 @@ main <- function() {
     
     ## make a violin plot of all filenames:
     max.ticks <- max(df$lengths)
-    plot <- ggplot(df, aes(x=1, y=lengths)) +
-        geom_violin(trim=TRUE) +
+    plot <- ggplot(df, aes(x=dataset, y=lengths)) +
+        geom_violin() +
         scale_y_continuous(name="est p(A) length", breaks=seq(0,max.ticks,10), limits=c(0,300)) +
-        theme_bw() +
-        theme(text=element_text(size=15),
-              axis.title.x=element_blank(),
-              axis.text.x=element_blank(),
-              axis.ticks.x=element_blank()) +
-        facet_grid(. ~ dataset)
+        theme_bw() + theme(text=element_text(size=15))
 
     ## save plot to file:
     ## TODO: optionally set size/dpi/etc.
