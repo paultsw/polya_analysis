@@ -46,7 +46,7 @@ main <- function() {
 
     ## save plot to file:
     ## TODO: optionally set size/dpi/etc.
-    ggsave("violin.svg", device="svg", units="in", height=9, width=9)
+    ggsave("ont.estimates.violin.svg", device="svg", units="in", height=9, width=9)
 }
 
 ### run main function:
