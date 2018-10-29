@@ -42,7 +42,7 @@ main <- function() {
 
     ## save plot to file:
     ## TODO: optionally set size/dpi/etc.
-    ggsave("density.png", device="png", width=10, height=5)
+    ggsave("ont.estimates.density.svg", device="svg", units="in", width=10, height=5)
 }
 
 ### run main function:
