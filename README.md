@@ -42,4 +42,4 @@ Notes
 
 Citations
 ---------
-(TBD)
+_Nanopore native RNA sequencing of a human poly(A) transcriptome_, Rachael E Workman, Alison Tang, Paul S. Tang, Miten Jain, John R Tyson, Philip C Zuzarte, Timothy Gilpatrick, Roham Razaghi, Joshua Quick, Norah Sadowski, Nadine Holmes, Jaqueline Goes de Jesus, Karen Jones, Terrance P Snutch, Nicholas James Loman, Benedict Paten, Matthew W Loose, Jared T Simpson, Hugh E. Olsen, Angela N Brooks, Mark Akeson, Winston Timp, bioRxiv: `https://www.biorxiv.org/content/early/2018/11/09/459529`
